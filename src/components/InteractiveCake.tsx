@@ -106,14 +106,17 @@ export default function InteractiveCake() {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 1, delay: 0.2 }}
+        transition={{ 
+          duration: 1, 
+          delay: 0.2,
+          type: 'spring', stiffness: 60
+        }}
         style={{
           position: 'relative',
           width: 'clamp(280px, 45vw, 420px)',
           transformStyle: 'preserve-3d',
         }}
         whileHover={{ rotateY: 8, rotateX: 12 }}
-        transition={{ type: 'spring', stiffness: 60 } as never}
       >
         {/* Candles */}
         <div style={{

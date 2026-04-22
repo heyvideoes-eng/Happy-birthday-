@@ -60,7 +60,7 @@ export default function GlobalBlessingOrb() {
   const [count, setCount]       = useState(0);          // forces re-trigger
   const lastIdx  = useRef(-1);
   const cooldown = useRef(false);
-  const autoHide = useRef<ReturnType<typeof setTimeout>>();
+  const autoHide = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Smart pick: avoid immediate repeat
   const pick = useCallback(() => {

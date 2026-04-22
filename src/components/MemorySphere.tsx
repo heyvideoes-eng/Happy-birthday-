@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 export default function MemorySphere({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouse = useRef({ x: 0, y: 0 });
-  const raf   = useRef<number>();
+  const raf   = useRef<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;

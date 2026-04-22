@@ -50,7 +50,7 @@ const CONFETTI_COLORS = [
 
 export default function BirthdayBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const raf       = useRef<number>();
+  const raf       = useRef<number | null>(null);
   const elems     = useRef<Element[]>([]);
   const confetti  = useRef<Confetto[]>([]);
 

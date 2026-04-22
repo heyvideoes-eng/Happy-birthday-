@@ -287,10 +287,12 @@ export default function SecretLetterPopup() {
             >
               <motion.div
                 initial={{ scale: 0.85, opacity: 0, y: 40, rotateX: 15 }}
-                animate={{ scale: 1, opacity: 1, y: 0, rotateX: rotateXModal, rotateY: rotateYModal }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.88, opacity: 0, y: 30 }}
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
                 style={{
+                  rotateX: rotateXModal,
+                  rotateY: rotateYModal,
                   width: '100%',
                   maxWidth: '820px',
                   maxHeight: '90vh',
