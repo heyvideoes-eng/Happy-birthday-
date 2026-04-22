@@ -57,7 +57,8 @@ export default function MemorySphere({ className }: { className?: string }) {
       // Parallax offset from mouse
       const mx = W / 2 + mouse.current.x * 14;
       const my = H / 2 + mouse.current.y * 9;
-      const R  = Math.min(W, H) * 0.21 * zoom;
+      const isMobile = W < 768;
+      const R  = Math.min(W, H) * (isMobile ? 0.28 : 0.21) * zoom;
 
       ctx.clearRect(0, 0, W, H);
 

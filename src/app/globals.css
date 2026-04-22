@@ -92,16 +92,16 @@ body::before {
 /* ─── Typography scale (strictly enforced) ─────────────────────────────── */
 .display-1 {
   font-family: var(--serif);
-  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  font-size: clamp(2.8rem, 10vw, 8.5rem);
   font-weight: 300;
-  line-height: 1;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   color: var(--text-dark);
 }
 
 .display-2 {
   font-family: var(--serif);
-  font-size: clamp(2.2rem, 5.5vw, 5rem);
+  font-size: clamp(2rem, 7vw, 5rem);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -110,20 +110,20 @@ body::before {
 
 .section-eyebrow {
   font-family: var(--sans);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--rose);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .section-heading {
   font-family: var(--serif);
-  font-size: clamp(2rem, 5vw, 3.8rem);
+  font-size: clamp(1.8rem, 6vw, 3.8rem);
   font-weight: 400;
   color: var(--text-dark);
-  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  margin-bottom: clamp(0.8rem, 4vw, 1.5rem);
   line-height: 1.15;
 }
 
@@ -323,8 +323,24 @@ body::before {
 
 /* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
+  .section {
+    padding: clamp(3.5rem, 15vw, 6rem) 1.25rem;
+  }
   .desktop-only { display: none !important; }
+  .glass-card {
+    padding: 1.5rem !important;
+  }
   .glass-card:hover { transform: translateY(-4px) scale(1.01); }
+  
+  .btn-rose, .btn-ghost {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+}
+@media (max-width: 480px) {
+  .display-1 { font-size: 2.5rem; }
+  .section-heading { font-size: 1.7rem; }
 }
 @media (min-width: 769px) { .mobile-only { display: none !important; } }
 @media (prefers-reduced-motion: reduce) {

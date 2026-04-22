@@ -97,7 +97,15 @@ function Hero() {
   useEffect(() => { setTimeout(() => setReady(true), 300); }, []);
 
   return (
-    <section style={{ position: 'relative', height: '100vh', minHeight: 700, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <section style={{ 
+      position: 'relative', 
+      height: '100svh', 
+      minHeight: '600px', 
+      overflow: 'hidden', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center' 
+    }}>
 
       {/* Full-canvas sphere */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
@@ -121,14 +129,13 @@ function Hero() {
 
       {/* Cute fixed emoji accents at corners */}
       {[
-        { emoji:'🎈', pos:{ top:'18%', left:'12%' }, delay:0,    rot:[-8,8] },
-        { emoji:'🌸', pos:{ top:'22%', right:'10%' }, delay:0.6,  rot:[5,-5] },
-        { emoji:'🎀', pos:{ bottom:'28%', left:'8%' }, delay:1.2, rot:[-5,5] },
-        { emoji:'💕', pos:{ bottom:'25%', right:'9%' }, delay:0.3, rot:[6,-6] },
-        { emoji:'⭐', pos:{ top:'12%', left:'38%' }, delay:0.9,  rot:[0,0] },
-        { emoji:'🧁', pos:{ bottom:'32%', left:'38%' }, delay:1.5, rot:[0,0] },
+        { emoji:'🎈', pos:{ top:'12%', left:'8%' }, delay:0,    rot:[-8,8] },
+        { emoji:'🌸', pos:{ top:'15%', right:'8%' }, delay:0.6,  rot:[5,-5] },
+        { emoji:'🎀', pos:{ bottom:'20%', left:'5%' }, delay:1.2, rot:[-5,5] },
+        { emoji:'💕', pos:{ bottom:'18%', right:'6%' }, delay:0.3, rot:[6,-6] },
       ].map((item, i) => (
         <motion.span key={i}
+          className="desktop-only"
           animate={{ y: [0, -12, 0], rotate: item.rot }}
           transition={{ duration: 3.5 + i * 0.4, delay: item.delay, repeat: Infinity, ease: 'easeInOut' }}
           style={{

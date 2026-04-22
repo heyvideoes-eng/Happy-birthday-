@@ -194,10 +194,11 @@ export default function GlobalBlessingOrb() {
             transition={{ duration:0.55, ease:[0.16,1,0.3,1] }}
             style={{
               position:'fixed',
-              bottom:'calc(clamp(1.5rem,3vw,2rem) + 70px)',
-              left:'clamp(1.5rem,3vw,2rem)',
+              bottom:'calc(clamp(1.2rem,3vw,2rem) + 65px)',
+              left:'clamp(1.2rem,3vw,2rem)',
               zIndex:9991,
-              width:'clamp(220px,30vw,300px)',
+              width:'calc(100% - 2.4rem)',
+              maxWidth:'280px',
               perspective:800,
             }}
           >
