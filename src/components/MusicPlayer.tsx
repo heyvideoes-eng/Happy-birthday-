@@ -10,23 +10,39 @@ export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=ambient-piano-amp-strings-10711.mp3');
+    // A sweet music-box version of Happy Birthday
+    audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2021/11/24/audio_3320c24233.mp3?filename=happy-birthday-music-box-12154.mp3');
     audioRef.current.loop = true;
-    audioRef.current.volume = 0.28;
+    audioRef.current.volume = 0.35;
 
-    // Hide label after 5s
-    const t = setTimeout(() => setShowLabel(false), 5000);
+    const startMusic = () => {
+      if (audioRef.current && !isPlaying) {
+        audioRef.current.play().then(() => {
+          setIsPlaying(true);
+        }).catch(() => {});
+      }
+    };
+
+    // Global interaction listener to bypass browser restrictions
+    window.addEventListener('click', startMusic, { once: true });
+    window.addEventListener('touchstart', startMusic, { once: true });
+
+    // Hide label after 6s
+    const t = setTimeout(() => setShowLabel(false), 6000);
 
     return () => {
       clearTimeout(t);
+      window.removeEventListener('click', startMusic);
+      window.removeEventListener('touchstart', startMusic);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [isPlaying]);
 
-  const togglePlay = () => {
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
