@@ -205,7 +205,7 @@ function Hero() {
             ✦ Begin the journey
           </button>
         </motion.div>
-        </motion.div>
+        </div>
         </MobileGyroParallax>
       </motion.div>
 
@@ -241,7 +241,7 @@ function MusicButton() {
   const audio = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    audio.current = new Audio('https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=ambient-piano-amp-strings-10711.mp3');
+    audio.current = new Audio('https://assets.mixkit.co/music/preview/mixkit-happy-birthday-87.mp3');
     if (audio.current) { audio.current.loop = true; audio.current.volume = 0.22; }
     return () => { audio.current?.pause(); };
   }, []);
