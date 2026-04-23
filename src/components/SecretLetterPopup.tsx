@@ -342,7 +342,6 @@ export default function SecretLetterPopup() {
                     {['🌸', '✨', '💕', '🌟'][i % 4]}
                   </motion.div>
                 ))}
-              >
                 {/* Close button */}
                 <motion.button
                   onClick={handleClose}
