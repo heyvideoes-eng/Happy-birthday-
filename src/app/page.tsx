@@ -163,7 +163,24 @@ function Hero() {
         initial={{ opacity: 0, y: 40, scale: 0.94 }}
         animate={ready ? { opacity: 1, y: 0, scale: 1 } : {}}
         transition={{ duration: 1.2, ease: [0.16,1,0.3,1], delay: 0.5 }}
-        style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 1.5rem', maxWidth: 760, width: '100%' }}
+        style={{ 
+          position: 'relative', 
+          zIndex: 10, 
+          textAlign: 'center', 
+          padding: 'clamp(2rem, 8vw, 5rem)', 
+          maxWidth: 760, 
+          width: '90%',
+          aspectRatio: '1/1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '50%',
+          border: '1.5px solid rgba(232, 141, 150, 0.2)',
+          boxShadow: 'inset 0 0 50px rgba(255, 255, 255, 0.5), 0 30px 60px rgba(232, 141, 150, 0.15)',
+          background: 'rgba(255, 255, 255, 0.35)',
+          backdropFilter: 'blur(10px)',
+        }}
       >
         <MobileGyroParallax strength={15}>
           <div className="glint-effect" style={{ borderRadius: '30px', padding: '1rem' }}>
@@ -329,18 +346,98 @@ export default function Home() {
             <BlessingsSection />
           </ZoomSection>
 
-          {/* Footer */}
-          <footer style={{ padding: 'clamp(3rem,7vw,6rem) 2rem', textAlign: 'center', background: 'linear-gradient(to top,rgba(255,209,214,0.3),transparent)' }}>
-            <div className="ornament-divider" style={{ maxWidth: 300, margin: '0 auto 2rem' }}>
-              <span style={{ fontFamily: 'var(--serif)', fontSize: '1.2rem', color: 'var(--gold)', opacity: 0.5 }}>✦</span>
-            </div>
-            <p style={{ fontFamily: 'var(--script)', fontSize: 'clamp(1rem,2.5vw,1.4rem)', color: 'var(--rose)', marginBottom: '0.75rem', opacity: 0.85 }}>
-              made with every piece of love
-            </p>
-            <p style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(1.2rem,3vw,1.8rem)', color: 'var(--text-dark)', fontStyle: 'italic', maxWidth: 500, margin: '0 auto', lineHeight: 1.6 }}>
-              "Happy Birthday, Mama — from Vanshika 🌸"
-            </p>
-            <p className="mono-label" style={{ marginTop: '2rem', opacity: 0.3 }}>a birthday gift made with love</p>
+          {/* Footer / Closing Section */}
+          <footer style={{ 
+            padding: 'clamp(5rem, 12vw, 10rem) 2rem', 
+            textAlign: 'center', 
+            background: 'linear-gradient(to top, rgba(255,209,214,0.4), transparent)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            {/* Ambient decorative particles */}
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{ 
+                  y: [0, -30, 0], 
+                  opacity: [0.2, 0.5, 0.2],
+                  rotate: [0, 20, -20, 0] 
+                }}
+                transition={{ 
+                  duration: 4 + i, 
+                  repeat: Infinity, 
+                  delay: i * 0.5 
+                }}
+                style={{
+                  position: 'absolute',
+                  left: `${15 + i * 15}%`,
+                  bottom: `${10 + (i % 3) * 15}%`,
+                  fontSize: '1.5rem',
+                  pointerEvents: 'none',
+                  opacity: 0.3
+                }}
+              >
+                {['🌸', '✨', '💕', '🎀', '🎈', '🌟'][i]}
+              </motion.div>
+            ))}
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2 }}
+              style={{ maxWidth: 700, margin: '0 auto', position: 'relative', zIndex: 1 }}
+            >
+              <div className="ornament-divider" style={{ maxWidth: 200, margin: '0 auto 3rem' }}>
+                <span style={{ fontFamily: 'var(--serif)', fontSize: '1.5rem', color: 'var(--gold)', opacity: 0.6 }}>✦ ✦ ✦</span>
+              </div>
+              
+              <p style={{ 
+                fontFamily: 'var(--script)', 
+                fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', 
+                color: 'var(--rose)', 
+                marginBottom: '1.5rem' 
+              }}>
+                You are my home.
+              </p>
+              
+              <p style={{ 
+                fontFamily: 'var(--serif)', 
+                fontSize: 'clamp(1.1rem, 2.2vw, 1.4rem)', 
+                color: 'var(--text-dark)', 
+                fontStyle: 'italic', 
+                lineHeight: 1.8, 
+                opacity: 0.85,
+                marginBottom: '3.5rem'
+              }}>
+                Long before I knew what love was, I felt it — in your presence, in your voice, and in the way you have always looked at me. 
+                Today, I hope you feel even a fraction of that love returned to you.
+              </p>
+
+              <div style={{ marginTop: '2rem' }}>
+                <p style={{ 
+                  fontFamily: 'var(--script)', 
+                  fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+                  color: 'var(--gold)',
+                  textShadow: '0 0 30px rgba(212, 175, 55, 0.3)',
+                  marginBottom: '0.5rem'
+                }}>
+                  Happy Birthday, Mama.
+                </p>
+                <p style={{ 
+                  fontFamily: 'var(--script)', 
+                  fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)', 
+                  color: 'var(--rose)',
+                  opacity: 0.9
+                }}>
+                  — with all my love, Vanshika 🌸
+                </p>
+              </div>
+
+              <p className="mono-label" style={{ marginTop: '5rem', opacity: 0.2, letterSpacing: '4px' }}>
+                A BIRTHDAY UNIVERSE MADE JUST FOR YOU
+              </p>
+            </motion.div>
           </footer>
         </main>
       )}

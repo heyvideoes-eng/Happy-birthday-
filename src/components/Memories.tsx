@@ -65,17 +65,17 @@ function MemoryCard({ mem, idx }: { mem: typeof memories[0]; idx: number }) {
         <div
           className="glass-card"
           style={{
-            aspectRatio: '4/3',
-            background: `linear-gradient(135deg, ${mem.color}, rgba(255,255,255,0.6))`,
+            background: `linear-gradient(135deg, ${mem.color}, rgba(255,255,255,0.75))`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: 'clamp(1.5rem, 4vw, 2.5rem)',
-            border: 'clamp(8px, 2vw, 16px) solid rgba(255,255,255,0.85)',
+            padding: 'clamp(2rem, 5vw, 3.5rem)',
+            borderRadius: '40px',
+            border: `1.5px dashed ${mem.accent}`,
             position: 'relative',
             overflow: 'hidden',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.06)',
+            boxShadow: '0 25px 60px rgba(232,141,150,0.12), inset 0 0 40px rgba(255,255,255,0.5)',
           }}
         >
           {/* Background texture */}
@@ -114,14 +114,18 @@ function MemoryCard({ mem, idx }: { mem: typeof memories[0]; idx: number }) {
             }} />
             <p style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(0.85rem, 1.5vw, 1rem)',
+              fontSize: 'clamp(0.95rem, 1.8vw, 1.15rem)',
               color: 'var(--color-text-mid)',
               fontStyle: 'italic',
-              opacity: 0.75,
+              opacity: 0.85,
+              lineHeight: 1.6,
             }}>
               {mem.detail}
             </p>
           </motion.div>
+          {/* Decorative Emojis */}
+          <div style={{ position: 'absolute', top: '1rem', left: '1rem', fontSize: '1.2rem', opacity: 0.4 }}>{mem.icon}</div>
+          <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', fontSize: '1.2rem', opacity: 0.4 }}>{mem.icon}</div>
         </div>
       </motion.div>
 
