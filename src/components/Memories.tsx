@@ -13,15 +13,7 @@ const memories = [
     accent: "var(--color-sunset)",
     icon: "🌷",
   },
-  {
-    era: "Growing Together",
-    year: "The Growing Years",
-    text: "The late-night conversations, the quiet reassurance, the way you believed in me even when I had stopped believing in myself. You were my compass.",
-    detail: "Your voice was the gentlest thing I knew.",
-    color: "var(--color-lavender)",
-    accent: "var(--color-plum)",
-    icon: "🌿",
-  },
+
   {
     era: "Here & Always",
     year: "Today & Forever",
