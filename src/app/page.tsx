@@ -195,7 +195,7 @@ function Hero() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ delay: 1.2, duration: 0.9 }}
           className="liquid-glass" style={{ borderRadius: 20, padding: 'clamp(1rem,2.5vw,1.5rem) clamp(1.5rem,4vw,2.5rem)', maxWidth: 500, margin: '0 auto 2.5rem', display: 'inline-block' }}>
           <p className="body-serif" style={{ margin: 0, fontSize: 'clamp(0.95rem,1.8vw,1.15rem)' }}>
-            A universe built from love, built only for you
+            Celebrating the wonderful person you are on this special day
           </p>
         </motion.div>
 
