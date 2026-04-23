@@ -256,36 +256,82 @@ function Divider({ label }: { label: string }) {
 // ── Music button ───────────────────────────────────────────────────────────────
 function MusicButton() {
   const [playing, setPlaying] = useState(false);
-  const audio = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    audio.current = new Audio('https://assets.mixkit.co/music/preview/mixkit-happy-birthday-87.mp3');
-    if (audio.current) { audio.current.loop = true; audio.current.volume = 0.22; }
-    return () => { audio.current?.pause(); };
+    // Use a high-quality birthday track
+    audioRef.current = new Audio('https://assets.mixkit.co/music/preview/mixkit-happy-birthday-87.mp3');
+    if (audioRef.current) {
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.25;
+    }
+
+    const startMusic = () => {
+      if (audioRef.current && !playing) {
+        audioRef.current.play().then(() => {
+          setPlaying(true);
+        }).catch(() => {
+          // Still blocked by browser
+        });
+      }
+    };
+
+    // Auto-play attempt on first interaction
+    window.addEventListener('click', startMusic, { once: true });
+    window.addEventListener('touchstart', startMusic, { once: true });
+
+    return () => {
+      audioRef.current?.pause();
+      window.removeEventListener('click', startMusic);
+      window.removeEventListener('touchstart', startMusic);
+    };
   }, []);
 
-  const toggle = () => {
-    if (!audio.current) return;
-    if (playing) audio.current.pause();
-    else audio.current.play().catch(() => {});
-    setPlaying(p => !p);
+  const toggle = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Don't trigger window listener
+    if (!audioRef.current) return;
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(() => {});
+    }
+    setPlaying(!playing);
   };
 
   return (
-    <motion.button onClick={toggle} aria-label={playing ? 'Pause music' : 'Play music'}
-      initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 2.5, type: 'spring' }}
-      className="liquid-glass" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}
+    <motion.button 
+      onClick={toggle} 
+      aria-label={playing ? 'Pause music' : 'Play music'}
+      initial={{ opacity: 0, scale: 0 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      transition={{ delay: 2, type: 'spring' }}
+      className="liquid-glass" 
+      whileHover={{ scale: 1.1 }} 
+      whileTap={{ scale: 0.93 }}
       style={{
-        position: 'fixed', bottom: 'clamp(1.5rem,3vw,2rem)', right: 'clamp(1.5rem,3vw,2rem)', zIndex: 9989,
-        width: 52, height: 52, borderRadius: '50%',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem',
+        position: 'fixed', 
+        bottom: 'clamp(1.5rem,3vw,2rem)', 
+        right: 'clamp(1.5rem,3vw,2rem)', 
+        zIndex: 9999,
+        width: 52, 
+        height: 52, 
+        borderRadius: '50%',
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        fontSize: '1.2rem',
+        boxShadow: '0 8px 32px rgba(232,141,150,0.3)',
+        border: '1.5px solid rgba(255,255,255,0.5)'
       }}>
       {playing ? (
         <motion.span animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}>🎵</motion.span>
       ) : '🔇'}
       {playing && (
-        <motion.div style={{ position: 'absolute', inset: -4, borderRadius: '50%', border: '1.5px solid rgba(232,141,150,0.5)' }}
-          animate={{ scale: [1, 1.7], opacity: [0.8, 0] }} transition={{ duration: 1.8, repeat: Infinity }} />
+        <motion.div 
+          style={{ position: 'absolute', inset: -4, borderRadius: '50%', border: '1.5px solid rgba(232,141,150,0.5)' }}
+          animate={{ scale: [1, 1.7], opacity: [0.8, 0] }} 
+          transition={{ duration: 1.8, repeat: Infinity }} 
+        />
       )}
     </motion.button>
   );
