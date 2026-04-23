@@ -306,6 +306,43 @@ export default function SecretLetterPopup() {
                   border: '1px solid rgba(212,175,55,0.15)',
                 }}
               >
+                {/* Background Texture & Particles */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  pointerEvents: 'none',
+                  opacity: 0.15,
+                  background: 'url("https://www.transparenttextures.com/patterns/handmade-paper.png")',
+                  zIndex: 0,
+                }} />
+
+                {/* Ambient Particles inside modal */}
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    animate={{ 
+                      y: [0, -50, 0], 
+                      x: [0, Math.random() * 40 - 20, 0],
+                      opacity: [0, 0.4, 0],
+                      rotate: [0, 180, 360] 
+                    }}
+                    transition={{ 
+                      duration: 8 + Math.random() * 5, 
+                      repeat: Infinity, 
+                      delay: i * 1.2 
+                    }}
+                    style={{
+                      position: 'absolute',
+                      left: `${Math.random() * 90}%`,
+                      top: `${Math.random() * 90}%`,
+                      fontSize: '1rem',
+                      zIndex: 0,
+                    }}
+                  >
+                    {['🌸', '✨', '💕', '🌟'][i % 4]}
+                  </motion.div>
+                ))}
+              >
                 {/* Close button */}
                 <motion.button
                   onClick={handleClose}
@@ -382,9 +419,15 @@ export default function SecretLetterPopup() {
                   ].map((para, i) => (
                     <motion.p
                       key={i}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 + i * 0.1, duration: 0.8 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.5 + i * 0.15, duration: 1 }}
+                      whileHover={{ 
+                        color: 'var(--color-sunset)', 
+                        x: 10,
+                        transition: { duration: 0.3 }
+                      }}
                       style={{
                         fontFamily: 'var(--font-serif)',
                         fontSize: 'clamp(1rem, 1.8vw, 1.25rem)',
@@ -393,6 +436,8 @@ export default function SecretLetterPopup() {
                         marginBottom: '1.4rem',
                         opacity: 0.88,
                         letterSpacing: '0.2px',
+                        cursor: 'default',
+                        transition: 'color 0.3s ease'
                       }}
                     >
                       {para}

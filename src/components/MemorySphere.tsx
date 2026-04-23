@@ -141,107 +141,108 @@ export default function MemorySphere({ className }: { className?: string }) {
       ctx.ellipse(mx + R*0.1, my + R*1.05, R*0.9, R*0.2, 0, 0, Math.PI*2);
       ctx.fill();
 
-      // ── 4. Sphere body — multi-layer realistic shading ────────────────────
-      const lx = mx - R * 0.32;
-      const ly = my - R * 0.32;
+      // ── 4. Sphere body — Glassy Liquid Shading ────────────────────
+      const lx = mx - R * 0.35;
+      const ly = my - R * 0.35;
 
-      const base = ctx.createRadialGradient(lx, ly, R * 0.02, mx, my, R * 1.02);
-      base.addColorStop(0,    '#FADADD');
-      base.addColorStop(0.15, '#F4A7B9');
-      base.addColorStop(0.38, '#E8718A');
-      base.addColorStop(0.62, '#C04060');
-      base.addColorStop(0.82, '#8B2040');
-      base.addColorStop(1,    '#4A0820');
+      // Base glass color (very soft and transparent)
+      const base = ctx.createRadialGradient(lx, ly, R * 0.05, mx, my, R * 1.1);
+      base.addColorStop(0,    'rgba(255,245,247,0.7)');
+      base.addColorStop(0.3,  'rgba(255,210,220,0.4)');
+      base.addColorStop(0.6,  'rgba(232,141,150,0.2)');
+      base.addColorStop(1,    'rgba(255,184,158,0.1)');
+      
       ctx.beginPath(); ctx.arc(mx, my, R, 0, Math.PI * 2);
       ctx.fillStyle = base; ctx.fill();
 
-      // ── 5. Grid lines clipped to sphere ───────────────────────────────────
+      // ── 5. Grid lines (Subtle & Glassy) ───────────────────────────────────
       ctx.save();
       ctx.beginPath(); ctx.arc(mx, my, R, 0, Math.PI * 2); ctx.clip();
 
-      const latCount = isMobile ? 3 : 9;
+      const latCount = isMobile ? 3 : 6;
       for (let i = 1; i <= latCount; i++) {
         const latAngle = (i / (latCount + 1)) * Math.PI;
         const ry = Math.cos(latAngle) * R;
         const rx = Math.sin(latAngle) * R;
         const isEq = i === Math.ceil(latCount / 2);
+        
         ctx.beginPath();
-        ctx.ellipse(mx, my + ry, rx, rx * 0.16, 0, 0, Math.PI * 2);
-        const brightness = Math.max(0, (my + ry - (my - R)) / (2 * R));
-        const alpha = isEq ? 0.55 : (0.08 + brightness * 0.06);
-        ctx.strokeStyle = isEq
-          ? `rgba(255,220,100,${alpha})`
-          : `rgba(255,255,255,${alpha})`;
-        ctx.lineWidth = isEq ? 1.5 : 0.6;
+        ctx.ellipse(mx, my + ry, rx, rx * 0.2, 0, 0, Math.PI * 2);
+        const alpha = isEq ? 0.3 : 0.08;
+        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+        ctx.lineWidth = 0.5;
         ctx.stroke();
       }
 
-      const numLon = isMobile ? 4 : 12;
-      const lonDetail = isMobile ? 40 : 80;
+      const numLon = isMobile ? 4 : 8;
       for (let i = 0; i < numLon; i++) {
-        const a = (i / numLon) * Math.PI * 2 + rot;
+        const a = (i / numLon) * Math.PI * 2 + rot * 0.5;
         ctx.beginPath();
-        for (let j = 0; j <= lonDetail; j++) {
-          const f    = j / lonDetail;
+        const latDetail = 30;
+        for (let j = 0; j <= latDetail; j++) {
+          const f    = j / latDetail;
           const lat  = f * Math.PI;
           const x    = mx + Math.sin(lat) * Math.cos(a) * R;
           const y    = my + Math.cos(lat) * R;
           j === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = `rgba(255,255,255,0.09)`;
+        ctx.strokeStyle = `rgba(255,255,255,0.06)`;
         ctx.lineWidth   = 0.5;
         ctx.stroke();
       }
       ctx.restore();
 
-      // ── 6. Rim light ──────────────────────────────────────────────────────
-      const rim = ctx.createRadialGradient(mx, my, R * 0.78, mx, my, R * 1.06);
+      // ── 6. Rim light (Stronger but soft) ──────────────────────────────────
+      const rim = ctx.createRadialGradient(mx, my, R * 0.85, mx, my, R * 1.05);
       rim.addColorStop(0,    'transparent');
-      rim.addColorStop(0.72, 'rgba(255,100,140,0.0)');
-      rim.addColorStop(0.88, 'rgba(255,130,160,0.35)');
-      rim.addColorStop(1,    'rgba(255,180,200,0.15)');
-      ctx.beginPath(); ctx.arc(mx, my, R * 1.06, 0, Math.PI * 2);
+      rim.addColorStop(0.8,  'rgba(255,255,255,0.2)');
+      rim.addColorStop(1,    'rgba(255,255,255,0.5)');
+      ctx.beginPath(); ctx.arc(mx, my, R * 1.05, 0, Math.PI * 2);
       ctx.fillStyle = rim; ctx.fill();
 
-      // ── 7. Terminator — shadow gradient ───────────────────────────────────
-      const term = ctx.createRadialGradient(
-        mx + R * 0.4, my + R * 0.4, R * 0.05,
-        mx + R * 0.4, my + R * 0.4, R * 1.3
-      );
-      term.addColorStop(0,   'transparent');
-      term.addColorStop(0.5, 'rgba(30,0,20,0.0)');
-      term.addColorStop(0.8, 'rgba(30,0,20,0.35)');
-      term.addColorStop(1,   'rgba(20,0,15,0.55)');
+      // ── 7. Liquid Highlight — Reactive to mouse ───────────────────────────
+      const highlightX = mx + mouse.current.x * R * 0.3;
+      const highlightY = my + mouse.current.y * R * 0.3;
+      
+      const liquidH = ctx.createRadialGradient(highlightX - R*0.2, highlightY - R*0.2, 0, highlightX, highlightY, R * 0.8);
+      liquidH.addColorStop(0,   'rgba(255,255,255,0.6)');
+      liquidH.addColorStop(0.5, 'rgba(255,255,255,0.1)');
+      liquidH.addColorStop(1,   'transparent');
+      
       ctx.beginPath(); ctx.arc(mx, my, R, 0, Math.PI * 2);
-      ctx.fillStyle = term; ctx.fill();
+      ctx.fillStyle = liquidH; ctx.fill();
 
-      // ── 8. Specular highlight ─────────────────────────────────────────────
-      const spec = ctx.createRadialGradient(lx + R*0.08, ly + R*0.08, 0, lx, ly, R * 0.45);
-      spec.addColorStop(0,    'rgba(255,255,255,0.90)');
-      spec.addColorStop(0.15, 'rgba(255,240,245,0.60)');
-      spec.addColorStop(0.35, 'rgba(255,220,230,0.25)');
-      spec.addColorStop(0.6,  'rgba(255,200,210,0.06)');
-      spec.addColorStop(1,    'transparent');
+      // ── 8. Specular glints (very simple) ──────────────────────────────────
+      const specX = mx - R * 0.4 + mouse.current.x * 10;
+      const specY = my - R * 0.4 + mouse.current.y * 10;
+      
+      const spec = ctx.createRadialGradient(specX, specY, 0, specX, specY, R * 0.3);
+      spec.addColorStop(0, 'rgba(255,255,255,0.8)');
+      spec.addColorStop(1, 'transparent');
+      
       ctx.beginPath(); ctx.arc(mx, my, R, 0, Math.PI * 2);
       ctx.fillStyle = spec; ctx.fill();
 
-      // ── 9. Secondary specular ─────────────────────────────────────────────
-      const glint = ctx.createRadialGradient(lx + R*0.22, ly + R*0.1, 0, lx + R*0.22, ly + R*0.1, R * 0.12);
-      glint.addColorStop(0, 'rgba(255,255,255,0.7)');
+      // ── 9. Secondary Glint ────────────────────────────────────────────────
+      const glintX = mx + R * 0.3 - mouse.current.x * 5;
+      const glintY = my + R * 0.3 - mouse.current.y * 5;
+      
+      const glint = ctx.createRadialGradient(glintX, glintY, 0, glintX, glintY, R * 0.2);
+      glint.addColorStop(0, 'rgba(255,255,255,0.4)');
       glint.addColorStop(1, 'transparent');
+      
       ctx.beginPath(); ctx.arc(mx, my, R, 0, Math.PI * 2);
       ctx.fillStyle = glint; ctx.fill();
 
-      // ── 10. Golden equatorial glow ────────────────────────────────────────
-      const eqG = ctx.createRadialGradient(mx, my, R * 0.88, mx, my, R * 1.08);
-      eqG.addColorStop(0,   'rgba(212,175,55,0.3)');
-      eqG.addColorStop(0.6, 'rgba(212,175,55,0.06)');
-      eqG.addColorStop(1,   'transparent');
-      ctx.beginPath(); ctx.arc(mx, my, R * 1.08, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(212,175,55,${0.5 * (eased > 0.5 ? 1 : eased * 2)})`;
-      ctx.lineWidth   = 1.5;
+      // ── 10. Golden Ring (Simple & interactive) ─────────────────────────────
+      const ringAlpha = 0.3 + Math.abs(mouse.current.x) * 0.2;
+      ctx.beginPath();
+      ctx.arc(mx, my, R * 1.02, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(212,175,55,${ringAlpha})`;
+      ctx.lineWidth = 1.2;
       ctx.stroke();
-      ctx.fillStyle   = eqG; ctx.fill();
+      ctx.fillStyle = 'rgba(212,175,55,0.05)';
+      ctx.fill();
 
       raf.current = requestAnimationFrame(draw);
     };

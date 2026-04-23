@@ -10,6 +10,7 @@ const GlobalBlessingOrb = dynamic(() => import('@/components/GlobalBlessingOrb')
 const BirthdayBackground = dynamic(() => import('@/components/BirthdayBackground'), { ssr: false });
 const SparkleTrail      = dynamic(() => import('@/components/SparkleTrail'),      { ssr: false });
 const MobileGyroParallax = dynamic(() => import('@/components/MobileGyroParallax'), { ssr: false });
+const InteractiveDecorations = dynamic(() => import('@/components/InteractiveDecorations'), { ssr: false });
 
 import WhySpecial      from '@/components/WhySpecial';
 import Memories        from '@/components/Memories';
@@ -305,6 +306,7 @@ export default function Home() {
           <BirthdayBackground />
           <GlobalBlessingOrb />
           <SparkleTrail />
+          <InteractiveDecorations />
           <MusicButton />
 
           {/* Hero */}
