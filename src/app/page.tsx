@@ -13,7 +13,7 @@ const MobileGyroParallax = dynamic(() => import('@/components/MobileGyroParallax
 
 import WhySpecial      from '@/components/WhySpecial';
 import Memories        from '@/components/Memories';
-import PhotoGallery    from '@/components/PhotoGallery';
+
 import InteractiveCake from '@/components/InteractiveCake';
 import SecretLetterPopup from '@/components/SecretLetterPopup';
 import BlessingsSection  from '@/components/BlessingsSection';
@@ -309,11 +309,7 @@ export default function Home() {
             </ZoomSection>
           </MobileGyroParallax>
 
-          {/* Photo Gallery */}
-          <Divider label="a vault of beautiful moments" />
-          <ZoomSection className="bg-cream">
-            <PhotoGallery />
-          </ZoomSection>
+
 
           {/* Cake */}
           <Divider label="close your eyes & wish" />
