@@ -18,17 +18,12 @@ interface Element {
 }
 
 const EMOJIS = [
-  // Birthday
   '🎀','🎈','🎊','🎉','🎂','🧁','🕯️',
-  // Love
   '💕','💖','🩷','❤️','💗','💝',
-  // Floral / cute
   '🌸','🌷','🌺','🌼','✨','⭐','🌟',
-  // Sparkle
   '✦','✧',
 ];
 
-// Confetti shapes (drawn as colored rectangles / circles)
 interface Confetto {
   x: number; y: number;
   vx: number; vy: number;
@@ -57,29 +52,32 @@ export default function BirthdayBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     const setSize = () => {
       canvas.width  = window.innerWidth  * window.devicePixelRatio;
-      canvas.height = document.body.scrollHeight * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     };
     setSize();
     window.addEventListener('resize', setSize, { passive: true });
 
     const W = () => window.innerWidth;
-    const H = () => document.body.scrollHeight;
+    const H = () => window.innerHeight;
+    const isMobile = window.innerWidth < 768;
 
     // Initialise emoji elements
-    const COUNT = Math.min(55, Math.floor(W() * H() / 28000));
+    const baseCount = Math.min(55, Math.floor(W() * H() / 28000));
+    const COUNT = isMobile ? Math.floor(baseCount * 0.4) : baseCount; // Stricter mobile cap
+    
     elems.current = Array.from({ length: COUNT }, () => ({
       x: Math.random() * W(),
       y: Math.random() * H(),
       vx: (Math.random() - 0.5) * 0.25,
       vy: -Math.random() * 0.35 - 0.08,
       emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
-      size: 14 + Math.random() * 22,
+      size: (isMobile ? 12 : 14) + Math.random() * (isMobile ? 18 : 22),
       opacity: 0.25 + Math.random() * 0.45,
       rotation: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() - 0.5) * 0.008,
@@ -89,14 +87,16 @@ export default function BirthdayBackground() {
     }));
 
     // Initialise confetti shapes
-    const CCOUNT = Math.min(80, Math.floor(W() * H() / 18000));
+    const baseCCount = Math.min(80, Math.floor(W() * H() / 18000));
+    const CCOUNT = isMobile ? Math.floor(baseCCount * 0.4) : baseCCount;
+    
     confetti.current = Array.from({ length: CCOUNT }, () => ({
       x: Math.random() * W(),
       y: Math.random() * H(),
       vx: (Math.random() - 0.5) * 0.3,
       vy: -Math.random() * 0.2 - 0.05,
-      w: 5 + Math.random() * 10,
-      h: 4 + Math.random() * 8,
+      w: (isMobile ? 4 : 5) + Math.random() * (isMobile ? 8 : 10),
+      h: (isMobile ? 3 : 4) + Math.random() * (isMobile ? 6 : 8),
       color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
       rotation: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() - 0.5) * 0.02,
@@ -114,9 +114,12 @@ export default function BirthdayBackground() {
         c.rotation += c.rotSpeed;
 
         // Wrap around
-        if (c.y < -20) c.y = h + 10;
-        if (c.x < -20) c.x = w + 10;
-        if (c.x > w + 20) c.x = -10;
+        if (c.y < -30) c.y = h + 20;
+        if (c.x < -30) c.x = w + 20;
+        if (c.x > w + 30) c.x = -20;
+
+        // Viewport Culling
+        if (c.x < -40 || c.x > w + 40 || c.y < -40 || c.y > h + 40) return;
 
         ctx.save();
         ctx.translate(c.x, c.y);
@@ -130,7 +133,6 @@ export default function BirthdayBackground() {
           ctx.arc(0, 0, c.w / 2, 0, Math.PI * 2);
           ctx.fill();
         } else {
-          // Diamond
           ctx.beginPath();
           ctx.moveTo(0, -c.h / 2);
           ctx.lineTo(c.w / 2, 0);
@@ -149,10 +151,13 @@ export default function BirthdayBackground() {
         el.y  += el.vy;
         el.rotation += el.rotSpeed;
 
-        // Wrap vertically (loop from top to bottom)
-        if (el.y < -60) el.y = h + 30;
-        if (el.x < -40) el.x = w + 20;
-        if (el.x > w + 40) el.x = -20;
+        // Wrap vertically
+        if (el.y < -70) el.y = h + 40;
+        if (el.x < -50) el.x = w + 30;
+        if (el.x > w + 50) el.x = -30;
+
+        // Viewport Culling
+        if (el.x < -60 || el.x > w + 60 || el.y < -60 || el.y > h + 60) return;
 
         ctx.save();
         ctx.translate(el.x, el.y);
@@ -188,6 +193,8 @@ export default function BirthdayBackground() {
         pointerEvents: 'none',
         zIndex: 0,
         opacity: 1,
+        willChange: 'transform',
+        transform: 'translateZ(0)'
       }}
     />
   );
