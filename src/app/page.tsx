@@ -8,6 +8,8 @@ import dynamic from 'next/dynamic';
 const MemorySphere      = dynamic(() => import('@/components/MemorySphere'),      { ssr: false });
 const GlobalBlessingOrb = dynamic(() => import('@/components/GlobalBlessingOrb'), { ssr: false });
 const BirthdayBackground = dynamic(() => import('@/components/BirthdayBackground'), { ssr: false });
+const SparkleTrail      = dynamic(() => import('@/components/SparkleTrail'),      { ssr: false });
+const MobileGyroParallax = dynamic(() => import('@/components/MobileGyroParallax'), { ssr: false });
 
 import WhySpecial      from '@/components/WhySpecial';
 import Memories        from '@/components/Memories';
@@ -163,6 +165,8 @@ function Hero() {
         transition={{ duration: 1.2, ease: [0.16,1,0.3,1], delay: 0.5 }}
         style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '0 1.5rem', maxWidth: 760, width: '100%' }}
       >
+        <MobileGyroParallax strength={15}>
+          <div className="glint-effect" style={{ borderRadius: '30px', padding: '1rem' }}>
         {/* Script label */}
         <motion.p initial={{ opacity: 0, y: 10 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.8, duration: 0.8 }}
           style={{ fontFamily: 'var(--script)', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', color: 'var(--rose)', marginBottom: '0.5rem', display: 'block' }}>
@@ -201,6 +205,8 @@ function Hero() {
             ✦ Begin the journey
           </button>
         </motion.div>
+        </motion.div>
+        </MobileGyroParallax>
       </motion.div>
 
       {/* Scroll indicator */}
@@ -281,6 +287,7 @@ export default function Home() {
         <main style={{ background: 'var(--pink-50)', position: 'relative', zIndex: 1 }}>
           <BirthdayBackground />
           <GlobalBlessingOrb />
+          <SparkleTrail />
           <MusicButton />
 
           {/* Hero */}
@@ -288,15 +295,19 @@ export default function Home() {
 
           {/* Why Special */}
           <Divider label="why she is extraordinary" />
-          <ZoomSection id="why" className="bg-soft">
-            <WhySpecial />
-          </ZoomSection>
+          <MobileGyroParallax strength={8}>
+            <ZoomSection id="why" className="bg-soft">
+              <WhySpecial />
+            </ZoomSection>
+          </MobileGyroParallax>
 
           {/* Memories */}
           <Divider label="the chapters that shaped us" />
-          <ZoomSection className="bg-blush">
-            <Memories />
-          </ZoomSection>
+          <MobileGyroParallax strength={5}>
+            <ZoomSection className="bg-blush">
+              <Memories />
+            </ZoomSection>
+          </MobileGyroParallax>
 
           {/* Photo Gallery */}
           <Divider label="a vault of beautiful moments" />

@@ -35,7 +35,12 @@
 /* ─── Reset ──────────────────────────────────────────────────────────── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; font-size: 16px; }
+html { 
+  scroll-behavior: smooth; 
+  font-size: 16px; 
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
 
 body {
   background: var(--pink-50);
@@ -320,6 +325,37 @@ body::before {
   100% { transform: scale(1.8); opacity: 0; }
 }
 .float-anim { animation: float 6s ease-in-out infinite; }
+
+/* ─── Glint Animation ─────────────────────────────────────────────────── */
+@keyframes glint {
+  0% { transform: translateX(-150%) skewX(-25deg); opacity: 0; }
+  20% { opacity: 0.8; }
+  50% { opacity: 0.8; }
+  80% { opacity: 0; }
+  100% { transform: translateX(150%) skewX(-25deg); opacity: 0; }
+}
+
+.glint-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.glint-effect::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: translateX(-150%) skewX(-25deg);
+  animation: glint 4s infinite;
+  pointer-events: none;
+}
 
 /* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
