@@ -10,22 +10,37 @@ export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // A sweet music-box version of Happy Birthday
-    audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2021/11/24/audio_3320c24233.mp3?filename=happy-birthday-music-box-12154.mp3');
+    // Attempt with multiple reliable sources
+    const sources = [
+      'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', // High availability test track
+      'https://assets.mixkit.co/music/preview/mixkit-happy-birthday-87.mp3',
+      'https://cdn.pixabay.com/download/audio/2021/11/24/audio_3320c24233.mp3?filename=happy-birthday-music-box-12154.mp3'
+    ];
+    
+    let currentSrcIndex = 0;
+    audioRef.current = new Audio(sources[currentSrcIndex]);
     audioRef.current.loop = true;
-    audioRef.current.volume = 0.35;
+    audioRef.current.volume = 0.4;
 
     const startMusic = () => {
       if (audioRef.current && !isPlaying) {
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch(() => {});
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch((err) => {
+            console.error("Playback failed, trying next source:", err);
+            currentSrcIndex++;
+            if (currentSrcIndex < sources.length) {
+              audioRef.current!.src = sources[currentSrcIndex];
+              audioRef.current!.play().then(() => setIsPlaying(true)).catch(() => {});
+            }
+          });
       }
     };
 
-    // Global interaction listener to bypass browser restrictions
+    // Attach to multiple events to ensure capture
     window.addEventListener('click', startMusic, { once: true });
     window.addEventListener('touchstart', startMusic, { once: true });
+    window.addEventListener('scroll', startMusic, { once: true });
 
     // Hide label after 6s
     const t = setTimeout(() => setShowLabel(false), 6000);
@@ -34,6 +49,7 @@ export default function MusicPlayer() {
       clearTimeout(t);
       window.removeEventListener('click', startMusic);
       window.removeEventListener('touchstart', startMusic);
+      window.removeEventListener('scroll', startMusic);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
